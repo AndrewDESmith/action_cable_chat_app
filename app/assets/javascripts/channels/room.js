@@ -22,14 +22,33 @@ App.room = App.cable.subscriptions.create("RoomChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
-    console.log("data.content", data.content)
+    document.getElementById("message_content").value.trim();
     if (data.content.trim().length !== 0) {
       $("#messages-table").append("<div class='message'>" +
         "<div class='message-user'>" + data.username + ":" + "</div>" +
         "<div class='message-content'>" + data.content + "</div>" + "</div>");
-      // window.scrollTo(0, document.body.scrollHeight);
-      messageWindow = document.getElementById("messages")
-      messageWindow.scrollTo(0, messageWindow.scrollHeight);
+      scroll_to_last_message();
     }
   }
 });
+
+document.addEventListener("turbolinks:load", () => {
+  message_submission_button = document.getElementById("new_message").querySelector("input[type='submit']");
+  submit_message(message_submission_button);
+});
+
+submit_message = (message_submission_button) => {
+  document.getElementById("message_content").addEventListener("keydown", (event) => {
+    if (event.keyCode == "13") {
+      message_submission_button.click();
+      event.target.value = "";
+      // Prevents insertion of newline.
+      event.preventDefault();
+    }
+  });
+}
+
+scroll_to_last_message = () => {
+  messageWindow = document.getElementById("messages")
+  messageWindow.scrollTo(0, messageWindow.scrollHeight);
+}
