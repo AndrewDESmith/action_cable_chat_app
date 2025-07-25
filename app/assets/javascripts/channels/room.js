@@ -9,10 +9,13 @@ App.room = App.cable.subscriptions.create("RoomChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
-
     document.getElementById("message_content").value.trim();
 
-    if(data.message.trim().length !== 0) {
+    if (data.mention) {
+      alert("You have a new mention from @" + data.user.username);
+    }
+
+    if(data.message && data.message.trim().length !== 0) {
       messages_table = document.getElementById("messages-table");
       messages_table.insertAdjacentHTML("beforeend", data.message)
       scroll_to_last_message();
