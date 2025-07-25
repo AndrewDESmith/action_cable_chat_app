@@ -12,7 +12,7 @@ App.room = App.cable.subscriptions.create("RoomChannel", {
     document.getElementById("message_content").value.trim();
 
     if (data.mention) {
-      alert("You have a new mention from @" + data.user.username);
+      alert("You have a new mention @" + data.user.username);
     }
 
     if(data.message && data.message.trim().length !== 0) {
