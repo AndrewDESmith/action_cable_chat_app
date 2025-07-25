@@ -28,7 +28,7 @@ document.addEventListener("turbolinks:load", () => {
 
 submit_message = (message_submission_button) => {
   document.getElementById("message_content").addEventListener("keydown", (event) => {
-    if (event.keyCode == "13") {
+    if (event.keyCode == "13" && !event.shiftKey) {
       message_submission_button.click();
       event.target.value = "";
       // Prevents insertion of newline.
