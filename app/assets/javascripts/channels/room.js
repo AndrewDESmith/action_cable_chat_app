@@ -1,16 +1,3 @@
-// App.room = App.cable.subscriptions.create "RoomChannel",
-//   connected: ->
-//     # Called when the subscription is ready for use on the server
-
-//   disconnected: ->
-//     # Called when the subscription has been terminated by the server
-
-//   received: (data) ->
-//     unless data.content.blank?
-//       $('#messages-table').append '<div class="message">' +
-//         '<div class="message-user">' + data.username + ":" + '</div>' +
-//         '<div class="message-content">' + data.content + '</div>' + '</div>'
-
 App.room = App.cable.subscriptions.create("RoomChannel", {
   connected: function() {
     // Called when the subscription is ready for use on the server
@@ -22,17 +9,19 @@ App.room = App.cable.subscriptions.create("RoomChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
+
     document.getElementById("message_content").value.trim();
-    if (data.content.trim().length !== 0) {
-      $("#messages-table").append("<div class='message'>" +
-        "<div class='message-user'>" + data.username + ":" + "</div>" +
-        "<div class='message-content'>" + data.content + "</div>" + "</div>");
+
+    if(data.message.trim().length !== 0) {
+      messages_table = document.getElementById("messages-table");
+      messages_table.insertAdjacentHTML("beforeend", data.message)
       scroll_to_last_message();
     }
   }
 });
 
 document.addEventListener("turbolinks:load", () => {
+  scroll_to_last_message();
   message_submission_button = document.getElementById("new_message").querySelector("input[type='submit']");
   submit_message(message_submission_button);
 });
